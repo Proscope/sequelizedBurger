@@ -1,24 +1,38 @@
-var express = require("express");
-var router = express.Router();
-var burger = require("../models/burger.js");
+var db = require("../models");
 
-// index page
-router.get('/', function (req, res) {
-  burger.selectAll(function(data) {
-    var cheeseBurgers = { burgers: data };
-    res.render('index', cheeseBurgers);
-  });
-});
-// create a new burger
-router.post('/burger/create', function (req, res) {
-  burger.insertOne(req.body.burger_name, function() {
-    res.redirect('/');
-  });
-});
-// devour a burger
-router.post('/burger/eat/:id', function (req, res) {
-  burger.updateOne(req.params.id, function() {
-    res.redirect('/');
-  });
-});
-module.exports = router;
+// Routes
+module.exports = function(app) {
+
+    // GET route to redirect
+    app.get('/', function(req, res) {
+        res.redirect("/api/all");
+    });
+
+    // GET route to show all burgers
+    app.get('/api/all', function(req, res) {
+        db.burgers.findAll({}).then(function(dbResponse) {
+            response.render("index", { burgers: dbResponse });
+        });
+    });
+
+    // POST route for saving a new post
+    app.post("/api/burgers", function(req, res) {
+        console.log(req.body.burger_name);
+        db.burgers.create({
+            burger_name: req.body.burger_name
+        }).then(function(dbPost) {
+            res.redirect("/api/all");
+        });
+    });
+
+    // PUT route for updating devoured value
+    app.put("/api/:id", function(req, res) {
+        db.burgers.update({ devoured: 1 }, {
+            where: {
+                id: req.body.id
+            }
+        }).then(function(dbPost) {
+            res.redirect("/api/all");
+        });
+    });
+};
