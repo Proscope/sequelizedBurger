@@ -1,0 +1,25 @@
+{
+  "name": "sequelizedburger",
+  "version": "1.0.0",
+  "description": "sequelized version of eat-da-burger",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Proscope/sequelizedBurger.git"
+  },
+  "author": "Harrison McCord",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Proscope/sequelizedBurger/issues"
+  },
+  "homepage": "https://github.com/Proscope/sequelizedBurger#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "mysql": "^2.14.1",
+    "sequelize": "^4.6.0"
+  }
+}

@@ -1,0 +1,2 @@
+CREATE DATABASE IF NOT EXISTS burgers2_db;
+USE burgers2_db;
