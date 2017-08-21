@@ -1,38 +1,33 @@
 var db = require("../models");
+var path = require("path");
 
 // Routes
+// =============================================================
 module.exports = function(app) {
 
-    // GET route to redirect
-    app.get('/', function(req, res) {
-        res.redirect("/api/all");
-    });
-
-    // GET route to show all burgers
-    app.get('/api/all', function(req, res) {
-        db.burgers.findAll({}).then(function(dbResponse) {
-            response.render("index", { burgers: dbResponse });
+    app.get("/", function(req, res) {
+        db.Burgers.findAll( { order: ['burger_name'] }).then(function(data) { // get all records, ordered by name
+            var hbsObject = {
+                burgers: data
+            };
+            res.render("index", hbsObject); // send to handlebars to render html
         });
     });
 
-    // POST route for saving a new post
-    app.post("/api/burgers", function(req, res) {
-        console.log(req.body.burger_name);
-        db.burgers.create({
-            burger_name: req.body.burger_name
-        }).then(function(dbPost) {
-            res.redirect("/api/all");
+    app.post("/", function(req, res) {
+        db.Burgers.create(
+            { burger_name: req.body.burger_name }
+        ).then(function() {
+            res.redirect("/index"); // re-render html
         });
     });
 
-    // PUT route for updating devoured value
-    app.put("/api/:id", function(req, res) {
-        db.burgers.update({ devoured: 1 }, {
-            where: {
-                id: req.body.id
-            }
-        }).then(function(dbPost) {
-            res.redirect("/api/all");
+    app.put("/:id", function(req, res) {
+        db.Burgers.update(
+            {devoured: true},
+            { where: { id: req.params.id }} // update devoured to 'true' where id matches req.params.id
+        ).then(function() {
+            res.redirect("/index"); // re-render html
         });
     });
 };

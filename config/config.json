@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "snoop1228",
-    "database": "burgers_db",
+    "database": "burgers2_db",
     "host": "localhost",
     "dialect": "mysql"
   },
