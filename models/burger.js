@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false,
         defaultValue: false
     }
-    // timestamps: false
+    //timestamps: false
   });
   return Burger;
 };

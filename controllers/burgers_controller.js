@@ -1,25 +1,33 @@
 
-var express = require("express");
-var router = express.Router();
-var burger = require("../models/burger.js");
+var db = require("../models");
 
-// index page
-router.get('/', function (req, res) {
-  db.burger.selectAll(function(data) {
-    var cheeseBurgers = { burgers: data };
-    res.render('index', cheeseBurgers);
+// Export routes for server.js to use.
+module.exports = function (app) {
+  app.get("/", function (req, res) {
+    db.Burger.findAll({}).then(function (dbPost) {
+      console.log(JSON.parse(JSON.stringify(dbPost))[0]);
+      var hbsObject = {
+      burgers: dbPost
+    };
+      res.render("index", JSON.parse(JSON.stringify(hbsObject)));
+    });
   });
-});
-// create a new burger
-router.post('/burger/create', function (req, res) {
-  db.burger.insertOne(req.body.burger_name, function() {
-    res.redirect('/');
+
+  app.post("/", function (req, res) {
+    db.Burger.create(req.body).then(function (dbPost) {
+      res.redirect("/");
+    });
   });
-});
-// devour a burger
-router.post('/burger/eat/:id', function (req, res) {
-  db.burger.updateOne(req.params.id, function() {
-    res.redirect('/');
+
+  app.put("/:id", function (req, res) {
+    db.Burger.update(
+      req.body,
+      {
+        where: {
+          id: req.params.id
+        }
+      }).then(function () {
+        res.redirect("/");
+      });
   });
-});
-module.exports = router;
+}
