@@ -1,33 +1,25 @@
-var db = require("../models");
-var path = require("path");
 
-// Routes
-// =============================================================
-module.exports = function(app) {
+var express = require("express");
+var router = express.Router();
+var burger = require("../models/burger.js");
 
-    app.get("/", function(req, res) {
-        db.Burgers.findAll( { order: ['burger_name'] }).then(function(data) { // get all records, ordered by name
-            var hbsObject = {
-                burgers: data
-            };
-            res.render("index", hbsObject); // send to handlebars to render html
-        });
-    });
-
-    app.post("/", function(req, res) {
-        db.Burgers.create(
-            { burger_name: req.body.burger_name }
-        ).then(function() {
-            res.redirect("/index"); // re-render html
-        });
-    });
-
-    app.put("/:id", function(req, res) {
-        db.Burgers.update(
-            {devoured: true},
-            { where: { id: req.params.id }} // update devoured to 'true' where id matches req.params.id
-        ).then(function() {
-            res.redirect("/index"); // re-render html
-        });
-    });
-};
+// index page
+router.get('/', function (req, res) {
+  db.burger.selectAll(function(data) {
+    var cheeseBurgers = { burgers: data };
+    res.render('index', cheeseBurgers);
+  });
+});
+// create a new burger
+router.post('/burger/create', function (req, res) {
+  db.burger.insertOne(req.body.burger_name, function() {
+    res.redirect('/');
+  });
+});
+// devour a burger
+router.post('/burger/eat/:id', function (req, res) {
+  db.burger.updateOne(req.params.id, function() {
+    res.redirect('/');
+  });
+});
+module.exports = router;
