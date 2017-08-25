@@ -1,6 +1,6 @@
 //burger model
 module.exports = function(sequelize, DataTypes) {
-  var Burger = sequelize.define('Burger', {
+  var burgers = sequelize.define('burgers', {
     burger_name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -10,10 +10,9 @@ module.exports = function(sequelize, DataTypes) {
     },
     devoured: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
         defaultValue: false
     }
     //timestamps: false
   });
-  return Burger;
+  return burgers;
 };
